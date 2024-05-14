@@ -10,7 +10,7 @@ gobuild:
 		-o build/app \
 		./cmd/cert-exporter
 
-dockerbuild: gobuild
+dockerbuild: 
 	docker build -t esinio/traefik-cert-exporter:latest --no-cache .
 
 dokcerpush: dockerbuild
@@ -24,3 +24,5 @@ dockerrun:
     -v /etc/traefik/certs:/certs  \
     -v /var/run/docker.sock:/var/run/docker.sock \
     esinio/traefik-cert-exporter
+
+ 
