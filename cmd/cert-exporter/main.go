@@ -292,13 +292,13 @@ func FindDockerContainersAndRestart(label string) error {
 
 	noWaitTimeout := 0
 	for _, ctr := range containers {
-		log.Info("found container: %s %s (status: %s)\n", ctr.ID, ctr.Image, ctr.Status)
+		log.Info("found container:", "id", ctr.ID, "image", ctr.Image, "status", ctr.Status)
 
 		err := apiClient.ContainerRestart(ctx, ctr.ID, container.StopOptions{
 			Timeout: &noWaitTimeout,
 		})
 		if err != nil {
-			log.Error("failed to restart docker container with label %s, %w", label, err)
+			log.Error("failed to restart docker container", "id", ctr.ID, "image", ctr.Image, "label", label, "error", err)
 		}
 
 	}
