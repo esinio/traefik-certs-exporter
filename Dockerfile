@@ -5,7 +5,7 @@ ADD . ./src
 WORKDIR /go/src
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
-    && apk --no-cache add ca-certificates \
+    && apk --no-cache add ca-certificates upx \
     && go env -w GOPROXY='https://goproxy.cn,direct' \
     && go mod tidy \
     && CGO_ENABLED=0 GOOS="linux" GOARCH="amd64" \
@@ -14,7 +14,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
         -tags timetzdata \
         -v \
         -o /app \
-        ./cmd/cert-exporter
+        ./cmd/cert-exporter \
+    && upx -9 /app
 
 FROM scratch as production
 
