@@ -13,7 +13,7 @@ gobuild:
 dockerbuild: 
 	docker build -t esinio/traefik-cert-exporter:latest --no-cache .
 
-dokcerpush: dockerbuild
+dockerpush: dockerbuild
 	docker push esinio/traefik-cert-exporter:latest
 
 dockerrun:
