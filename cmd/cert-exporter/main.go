@@ -219,35 +219,41 @@ func DetachFullchainPem(fullChain string) (string, string) {
 // a bool value returned means the write action had performed done or not
 func CompareAndOverWritePemFile(fileDir, filename string, data []byte) (bool, error) {
 	fp := pemFullPath(fileDir, filename)
-	fd, err := os.OpenFile(fp, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
+	fdr, err := os.OpenFile(fp, os.O_RDONLY, 0644)
+
+	var originalData []byte
+
+	if os.IsNotExist(err) {
+		fmt.Errorf("file not exist, it will be created when write: %w", err)
+	} else if err != nil {
 		return false, fmt.Errorf("failed to open file when attempting to write: %w", err)
+	} else {
+		defer fdr.Close()
+
+		// read original file content
+		originalData, err := io.ReadAll(fdr)
+		if err != nil {
+			return false, fmt.Errorf("failed to read original pem file: %w", err)
+		}
+
+		// compare data with original file content
+		if ok := reflect.DeepEqual(data, originalData); ok {
+			// do nothing
+			log.Info("pem file content as before, pass", "file", fp)
+			return false, nil
+		}
 	}
 
-	// read original file content
-	originalData, err := io.ReadAll(fd)
-	if err != nil {
-		return false, fmt.Errorf("failed to read original pem file: %w", err)
-	}
-
-	// compare data with original file content
-	if ok := reflect.DeepEqual(data, originalData); ok {
-		// do nothing
-		log.Info("pem file content as before, pass", "file", fp)
-		return false, nil
-	}
+	fdw, err = os.OpenFile(fp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	defer fdw.Close()
 
 	// write data to file
-	if _, err := fd.Write(data); err != nil {
+	if _, err := fdw.Write(data); err != nil {
 		return false, fmt.Errorf("failed to write file: %w", err)
 	}
 
-	if err := fd.Sync(); err != nil {
+	if err := fdw.Sync(); err != nil {
 		return false, fmt.Errorf("failed to commits the current contents of the file to stable storage: %w", err)
-	}
-
-	if err := fd.Close(); err != nil {
-		return false, fmt.Errorf("failed to close file: %s, %w", fp, err)
 	}
 
 	return true, nil
