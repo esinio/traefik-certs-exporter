@@ -24,3 +24,23 @@ certs_flat/
     sub.example.nl.key
     sub.example.nl.chain.pem
 ```
+
+# Usage
+
+
+
+```shell
+podman pull esinio/traefik-cert-exporter
+podman run -itd \
+    --restart=always \
+    --name=traefik-cert-exporter \
+    -v /srv/container/traefik/acme/cert.json:/acme.json  \
+    -v /etc/traefik/certs:/certs  \
+    -v /run/podman/podman.sock:/var/run/docker.sock \
+    esinio/traefik-cert-exporter
+```
+
+# Add container label
+```
+"traefik.cert.domain=example.com
+```
