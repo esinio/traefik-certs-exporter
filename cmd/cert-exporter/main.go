@@ -221,7 +221,7 @@ func CompareAndOverWritePemFile(fileDir, filename string, data []byte) (bool, er
 	fp := pemFullPath(fileDir, filename)
 	fdr, err := os.OpenFile(fp, os.O_RDONLY, 0644)
 
-	var originalData []byte
+	// var originalData []byte
 
 	if os.IsNotExist(err) {
 		fmt.Errorf("file not exist, it will be created when write: %w", err)
@@ -244,7 +244,7 @@ func CompareAndOverWritePemFile(fileDir, filename string, data []byte) (bool, er
 		}
 	}
 
-	fdw, err = os.OpenFile(fp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	fdw, err := os.OpenFile(fp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	defer fdw.Close()
 
 	// write data to file
