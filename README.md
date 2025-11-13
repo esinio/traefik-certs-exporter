@@ -4,6 +4,7 @@
 
 ## destination files:
 
+```
 certs/
     example.com/
         cert.pem
@@ -22,3 +23,4 @@ certs_flat/
     sub.example.nl.crt
     sub.example.nl.key
     sub.example.nl.chain.pem
+```
