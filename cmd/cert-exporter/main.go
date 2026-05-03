@@ -18,7 +18,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/fsnotify/fsnotify"
 
-	"git.esin.io/lab/traefik-certs-exporter/repo"
+	"github.com/esinio/traefik-certs-exporter/repo"
 )
 
 const (
