@@ -1,4 +1,4 @@
-module git.esin.io/lab/traefik-certs-exporter
+module github.com/esinio/traefik-certs-exporter
 
 go 1.22.2
 
